@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>callbacks Assignment by - Abbas</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+      }
+      body {
+        background-color: yellow;
+        width: 100%;
+        height: 100vh;
+        /* position: relative;
+        top: 0;
+        left: 0;
+        transform: translate(-50%,-50%); */
+        display: flex;
+        /* align-items: center; */
+        justify-content: center;
+      }
+      .btn {
+        padding: 0.6rem 1rem;
+        outline: none;
+        border: 2px solid #0f319f;
+        font-weight: bold;
+        color: #0f319f;
+        background-color: transparent;
+        transition: 0.5s all;
+        cursor: pointer;
+      }
+      .btn:hover {
+        color: #fff;
+        background-color: #0f319f;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        min-height: 25rem;
+      }
+      .data {
+        background-color: #fff;
+        padding: 1rem;
+        width: 25rem;
+        box-shadow: 10px 10px 10px #00000018;
+        min-height: 1rem;
+        max-height: 25rem;
+        overflow-y: scroll;
+        display: none;
+      }
+      .textPara {
+        background-color: #e6e6e6;
+        margin: 0.4rem 0;
+        padding: 0.4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button class="btn">Click Me</button>
+      <div class="data">
+        <p class="textPara"></p>
+      </div>
+    </div>
+
+    <script>
+      // targeting the dom elements
+      const btn = document.querySelector(".btn");
+      const para = document.querySelector(".textPara");
+      const data = document.querySelector(".data");
+
+      // creating an array to store fetched data
+      let fetchedDataPosts = [];
+
+      // adding en event listener on button
+      btn.addEventListener("click", () => {
+        para.textContent = "Callback will be executed after 5 seconds";
+        data.style.display = "block";
+
+        setTimeout(() => {
+          //   fetch data here with a delay of 5 seconds
+          const Response = fetch("https://dummyjson.com/posts");
+
+          Response.then((res) => {
+            return res.json();
+          })
+            .then((result) => {
+              fetchedDataPosts = result.posts;
+
+              // setting the data on the div
+              setData();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }, 5000);
+      });
+
+      // seperate function to set the data to the div
+      function setData() {
+        if (fetchedDataPosts.length !== 0) {
+          data.innerHTML = "";
+          fetchedDataPosts.map((item, index) => {
+            const dataContent = document.createElement("p");
+            dataContent.classList.add("textPara");
+
+            dataContent.innerHTML = `
+               ${item.title}
+            `;
+            data.appendChild(dataContent);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>async-await Assignment by - Abbas</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+      }
+      body {
+        background-color: #ffe9d0;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
+      .btn {
+        padding: 0.6rem 1rem;
+        outline: none;
+        border: 2px solid #dc0083;
+        font-weight: bold;
+        color: #dc0083;
+        background-color: transparent;
+        transition: 0.5s all;
+        cursor: pointer;
+      }
+      .btn:hover {
+        color: #fff;
+        background-color: #dc0083;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        min-height: 25rem;
+      }
+      .data {
+        background-color: #fff;
+        padding: 1rem;
+        width: 25rem;
+        box-shadow: 10px 10px 10px #00000018;
+        min-height: 1rem;
+        max-height: 25rem;
+        overflow-y: scroll;
+        display: none;
+      }
+      .textPara {
+        background-color: #f9f1e7;
+        margin: 0.4rem 0;
+        padding: 0.4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button class="btn">Click Me</button>
+      <div class="data">
+        <p class="textPara"></p>
+      </div>
+    </div>
+
+    <script>
+      // targeting the dom elements
+      const btn = document.querySelector(".btn");
+      const para = document.querySelector(".textPara");
+      const data = document.querySelector(".data");
+
+      // creating an array to store fetched data
+      let fetchedDataPosts = [];
+
+      // adding en event listener on button
+      btn.addEventListener("click", () => {
+        para.textContent = "Loading...";
+        data.style.display = "block";
+        //   fetch data here, using fetchData function
+        fetchData();
+      });
+
+      // fetchdata function to fetch the data from api
+      const fetchData = async () => {
+        try {
+          const Response = await fetch("https://dummyjson.com/posts");
+
+          const fetchdata = await Response.json();
+          fetchedDataPosts = fetchdata.posts;
+          setData();
+        } catch (error) {
+          console.log(error.message);
+          para.textContent = `${error.message}`;
+        }
+      };
+
+      // seperate function to set the data to the div
+      function setData() {
+        if (fetchedDataPosts.length !== 0) {
+          data.innerHTML = "";
+          fetchedDataPosts.map((item, index) => {
+            const dataContent = document.createElement("p");
+            dataContent.classList.add("textPara");
+
+            dataContent.innerHTML = `
+               ${item.title}
+            `;
+            data.appendChild(dataContent);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
